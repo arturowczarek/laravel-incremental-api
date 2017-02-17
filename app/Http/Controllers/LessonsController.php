@@ -7,7 +7,7 @@ use App\Lesson;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
-class LessonsController extends Controller
+class LessonsController extends ApiController
 {
     protected $lessonTransformer;
 
@@ -29,9 +29,10 @@ class LessonsController extends Controller
     public function index()
     {
         $lessons = Lesson::all();
-        return Response::json([
+
+        return $this->respond([
             'data' => $this->lessonTransformer->transformCollection($lessons->toArray())
-        ], 200);
+        ]);
     }
 
     /**
@@ -65,16 +66,18 @@ class LessonsController extends Controller
     {
         $lesson = Lesson::find($id);
         if (!$lesson) {
-            return Response::json([
-                'error' => [
-                    'message' => 'Lesson does not exist'
-                ]
-            ], 404);
+            return $this->respondNotFound('Lesson does not exist.');
+//            return $this->respondWithError(404, 'Lesson does not exist');
+//            return Response::json([
+//                'error' => [
+//                    'message' => 'Lesson does not exist'
+//                ]
+//            ], 404);
         }
 
-        return Response::json([
+        return $this->respond([
             'data' => $this->lessonTransformer->transform($lesson)
-        ], 200);
+        ]);
     }
 
     /**
