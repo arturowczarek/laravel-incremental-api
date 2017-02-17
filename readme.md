@@ -65,3 +65,7 @@ private function transform ($lesson) {
     ];
 }
 ```
+
+# Extraction
+- Extract transformating functions to external classes to abide by single responsibility principle
+

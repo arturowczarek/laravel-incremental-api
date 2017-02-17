@@ -2,12 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use app\Acme\Transformers\LessonTransformer;
 use App\Lesson;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class LessonsController extends Controller
 {
+    protected $lessonTransformer;
+
+    /**
+     * LessonsController constructor.
+     * @param $lessonTransformer
+     */
+    public function __construct(LessonTransformer $lessonTransformer)
+    {
+        $this->lessonTransformer = $lessonTransformer;
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +30,7 @@ class LessonsController extends Controller
     {
         $lessons = Lesson::all();
         return Response::json([
-            'data' => $this->transformCollection($lessons)
+            'data' => $this->lessonTransformer->transformCollection($lessons->toArray())
         ], 200);
     }
 
@@ -60,7 +73,7 @@ class LessonsController extends Controller
         }
 
         return Response::json([
-            'data' => $this->transform($lesson)
+            'data' => $this->lessonTransformer->transform($lesson)
         ], 200);
     }
 
@@ -98,16 +111,4 @@ class LessonsController extends Controller
         //
     }
 
-    private function transformCollection($lessons)
-    {
-        return array_map([$this, 'transform'], $lessons->toArray());
-    }
-
-    private function transform ($lesson) {
-        return [
-            'title' => $lesson['title'],
-            'body' => $lesson['body'],
-            'active' => (boolean) $lesson['some_bool']
-        ];
-    }
 }
