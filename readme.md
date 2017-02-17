@@ -37,3 +37,13 @@ Route::group(['prefix' => 'api/v1'], function () {
   - It mimics database structure. (You can try to avoid it adding field `protected $hidden = ['password']`; it'll hide this field when entity is cast to array or json)
   - You may one day in the future want to change the field name in the database
   - There is no way to signal headers/response codes
+
+# Level 2: Responses and Codes
+- Class `Illuminate\Support\Facades\Response` allows to alleviate some pain related to returning raw data. We use it like this:
+```php
+$lessons = Lesson::all();
+return Response::json([
+    'data' => $lessons->toArray()
+], 200);
+```
+- Try to foresee exceptional situations and respond with appropriate responses with correct error codes
