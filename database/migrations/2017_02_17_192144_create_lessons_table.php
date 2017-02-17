@@ -17,6 +17,7 @@ class CreateLessonsTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->text('body');
+            $table->boolean('some_bool');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateLessonsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lesson');
+        Schema::dropIfExists('lessons');
     }
 }

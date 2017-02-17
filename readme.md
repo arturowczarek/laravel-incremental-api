@@ -47,3 +47,21 @@ return Response::json([
 ], 200);
 ```
 - Try to foresee exceptional situations and respond with appropriate responses with correct error codes
+
+# Level 3: Transformations
+- When we have boolean fields, they are casted to integer fields. The `true` value becomes `1`. Cast it to boolean before returning
+- Use some transformer to transform your model to desired output eg.:
+```php
+private function transformCollection($lessons)
+{
+    return array_map([$this, 'transform'], $lessons->toArray());
+}
+
+private function transform ($lesson) {
+    return [
+        'title' => $lesson['title'],
+        'body' => $lesson['body'],
+        'active' => (boolean) $lesson['some_bool']
+    ];
+}
+```
