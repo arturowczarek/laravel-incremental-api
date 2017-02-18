@@ -11,5 +11,11 @@ class DatabaseSeeder extends Seeder
         Lesson::truncate();
         Model::unguard();
         $this->call(LessonsTableSeeder::class);
+
+        $user = new \App\User;
+        $user->name = 'john';
+        $user->email = 'john@gmail.com';
+        $user->password = Hash::make('password');
+        $user->save();
     }
 }

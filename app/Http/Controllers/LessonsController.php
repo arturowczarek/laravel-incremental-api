@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use app\Acme\Transformers\LessonTransformer;
 use App\Lesson;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Response;
 
 class LessonsController extends ApiController
 {
@@ -18,6 +17,8 @@ class LessonsController extends ApiController
     public function __construct(LessonTransformer $lessonTransformer)
     {
         $this->lessonTransformer = $lessonTransformer;
+
+        $this->middleware('auth.basic', ['only' => 'store']);
     }
 
 
@@ -53,7 +54,12 @@ class LessonsController extends ApiController
      */
     public function store(Request $request)
     {
-        //
+        if (!$request->input('title') or !$request->input('body')) {
+            return $this->respondUnproccessableEntity("Parameters failed validation for a lesson");
+        }
+
+        Lesson::create($request->all());
+        return $this->respondCreated('Lesson successfully created.');
     }
 
     /**
@@ -67,12 +73,6 @@ class LessonsController extends ApiController
         $lesson = Lesson::find($id);
         if (!$lesson) {
             return $this->respondNotFound('Lesson does not exist.');
-//            return $this->respondWithError(404, 'Lesson does not exist');
-//            return Response::json([
-//                'error' => [
-//                    'message' => 'Lesson does not exist'
-//                ]
-//            ], 404);
         }
 
         return $this->respond([
@@ -113,5 +113,6 @@ class LessonsController extends ApiController
     {
         //
     }
+
 
 }

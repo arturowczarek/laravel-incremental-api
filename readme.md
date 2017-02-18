@@ -69,3 +69,12 @@ private function transform ($lesson) {
 # Extraction
 - Extract transformating functions to external classes to abide by single responsibility principle
 
+#Level 4: Basic Authentication
+- In new laravel you have to resort to workaround and add api as an exception in `VarifyCsrfToken` middleware 
+- To have basic authentication for specified method use `$this->middleware('auth.basic', ['only' => 'store']);`
+- In laravel 5 acces form data via `$request->input('field_name')`
+- Response code constants can be found in `Illuminate\Http\Response`. It may crash with Facade Response so you have to rename it:
+```php
+use Illuminate\Support\Facades\Response;
+use Illuminate\Http\Response as IlluminateResponse;
+```
